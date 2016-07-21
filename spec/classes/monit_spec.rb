@@ -125,7 +125,7 @@ include /my/plugin/dir/*
   end
 
   describe 'Test standard installation with monitoring and firewalling' do
-    let(:params) { {:monitor => true , :firewall => true, :port => '42', :protocol => 'tcp' } }
+    let(:params) { {:monitor => true , :fw => true, :port => '42', :protocol => 'tcp' } }
     it { should contain_package('monit').with_ensure('present') }
     it { should contain_service('monit').with_ensure('running') }
     it { should contain_service('monit').with_enable('true') }
@@ -135,7 +135,7 @@ include /my/plugin/dir/*
   end
 
   describe 'Test decommissioning - absent' do
-    let(:params) { {:absent => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
+    let(:params) { {:absent => true, :monitor => true , :fw => true, :port => '42', :protocol => 'tcp'} }
     it 'should remove Package[monit]' do should contain_package('monit').with_ensure('absent') end
     it 'should stop Service[monit]' do should contain_service('monit').with_ensure('stopped') end
     it 'should not enable at boot Service[monit]' do should contain_service('monit').with_enable('false') end
@@ -145,7 +145,7 @@ include /my/plugin/dir/*
   end
 
   describe 'Test decommissioning - disable' do
-    let(:params) { {:disable => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
+    let(:params) { {:disable => true, :monitor => true , :fw => true, :port => '42', :protocol => 'tcp'} }
     it { should contain_package('monit').with_ensure('present') }
     it 'should stop Service[monit]' do should contain_service('monit').with_ensure('stopped') end
     it 'should not enable at boot Service[monit]' do should contain_service('monit').with_enable('false') end
@@ -159,7 +159,7 @@ include /my/plugin/dir/*
       { 
         :disableboot => true,
         :monitor => true,
-        :firewall => true,
+        :fw => true,
         :port => '42',
         :protocol => 'tcp'
       }
@@ -184,7 +184,7 @@ include /my/plugin/dir/*
       { 
         :disableboot => true,
         :monitor => true,
-        :firewall => true,
+        :fw => true,
         :port => '42',
         :protocol => 'tcp'
       }
@@ -243,12 +243,12 @@ include /my/plugin/dir/*
   end
 
   describe 'Test Firewall Tools Integration' do
-    let(:params) { {:firewall => true, :firewall_tool => "iptables" , :protocol => "tcp" , :port => "42" } }
+    let(:params) { {:fw => true, :firewall_tool => "iptables" , :protocol => "tcp" , :port => "42" } }
     it { should contain_firewall('monit_tcp_42').with_tool('iptables') }
   end
 
   describe 'Test OldGen Module Set Integration' do
-    let(:params) { {:monitor => "yes" , :monitor_tool => "puppi" , :firewall => "yes" , :firewall_tool => "iptables" , :puppi => "yes" , :port => "42" , :protocol => 'tcp' } }
+    let(:params) { {:monitor => "yes" , :monitor_tool => "puppi" , :fw => "yes" , :firewall_tool => "iptables" , :puppi => "yes" , :port => "42" , :protocol => 'tcp' } }
     it { should contain_monitor__process('monit_process').with_tool('puppi') }
     it { should contain_firewall('monit_tcp_42').with_tool('iptables') }
     it { should contain_puppi__ze('monit').with_ensure('present') }
@@ -274,7 +274,7 @@ include /my/plugin/dir/*
 
   describe 'Test params lookup' do
     let(:facts) { { :monitor => false , :ipaddress => '10.42.42.42' } }
-    let(:params) { { :monitor => true , :firewall => true, :port => '42' } }
+    let(:params) { { :monitor => true , :fw => true, :port => '42' } }
     it 'should honour passed params over global vars' do should contain_monitor__process('monit_process').with_enable('true') end
   end
 
