@@ -319,7 +319,7 @@ class monit (
   $monitor_target            = params_lookup( 'monitor_target' , 'global' ),
   $puppi                     = params_lookup( 'puppi' , 'global' ),
   $puppi_helper              = params_lookup( 'puppi_helper' , 'global' ),
-  $firewall                  = params_lookup( 'firewall' , 'global' ),
+  $fw                        = params_lookup( 'fw' , 'global' ),
   $firewall_tool             = params_lookup( 'firewall_tool' , 'global' ),
   $firewall_src              = params_lookup( 'firewall_src' , 'global' ),
   $firewall_dst              = params_lookup( 'firewall_dst' , 'global' ),
@@ -354,7 +354,7 @@ class monit (
   $bool_disableboot=any2bool($disableboot)
   $bool_monitor=any2bool($monitor)
   $bool_puppi=any2bool($puppi)
-  $bool_firewall=any2bool($firewall)
+  $bool_firewall=any2bool($fw)
   $bool_debug=any2bool($debug)
 
   ### Definition of some variables used in the module
