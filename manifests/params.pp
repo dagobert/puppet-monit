@@ -148,7 +148,7 @@ class monit::params {
   $monitor = false
   $monitor_tool = ''
   $monitor_target = $::ipaddress
-  $firewall = false
+  $fw = false
   $firewall_tool = ''
   $firewall_src = '0.0.0.0/0'
   $firewall_dst = $::ipaddress
