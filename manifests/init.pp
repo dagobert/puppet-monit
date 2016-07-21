@@ -231,6 +231,9 @@
 # [*process_user*]
 #   The name of the user monit runs with. Used by puppi and monitor.
 #
+# [*process_group*]
+#   The name of the group monit runs with. Used by puppi and monitor.
+#
 # [*config_dir*]
 #   Main configuration directory. Used by puppi
 #
@@ -316,7 +319,7 @@ class monit (
   $monitor_target            = params_lookup( 'monitor_target' , 'global' ),
   $puppi                     = params_lookup( 'puppi' , 'global' ),
   $puppi_helper              = params_lookup( 'puppi_helper' , 'global' ),
-  $firewall                  = params_lookup( 'firewall' , 'global' ),
+  $fw                        = params_lookup( 'fw' , 'global' ),
   $firewall_tool             = params_lookup( 'firewall_tool' , 'global' ),
   $firewall_src              = params_lookup( 'firewall_src' , 'global' ),
   $firewall_dst              = params_lookup( 'firewall_dst' , 'global' ),
@@ -327,6 +330,7 @@ class monit (
   $process                   = params_lookup( 'process' ),
   $process_args              = params_lookup( 'process_args' ),
   $process_user              = params_lookup( 'process_user' ),
+  $process_group             = params_lookup( 'process_group' ),
   $config_dir                = params_lookup( 'config_dir' ),
   $config_file               = params_lookup( 'config_file' ),
   $config_file_mode          = params_lookup( 'config_file_mode' ),
@@ -350,7 +354,7 @@ class monit (
   $bool_disableboot=any2bool($disableboot)
   $bool_monitor=any2bool($monitor)
   $bool_puppi=any2bool($puppi)
-  $bool_firewall=any2bool($firewall)
+  $bool_firewall=any2bool($fw)
   $bool_debug=any2bool($debug)
 
   ### Definition of some variables used in the module
@@ -455,12 +459,12 @@ class monit (
   }
 
   service { 'monit':
-    ensure     => $monit::manage_service_ensure,
-    name       => $monit::service,
-    enable     => $monit::manage_service_enable,
-    hasstatus  => $monit::service_status,
-    pattern    => $monit::process,
-    require    => Package[$monit::package],
+    ensure    => $monit::manage_service_ensure,
+    name      => $monit::service,
+    enable    => $monit::manage_service_enable,
+    hasstatus => $monit::service_status,
+    pattern   => $monit::process,
+    require   => Package[$monit::package],
   }
 
   file { 'monit.conf':
@@ -489,7 +493,7 @@ class monit (
   }
 
   # The whole monit configuration directory can be recursively overriden
-  if $monit::source_dir {
+  if $monit::source_dir and $monit::source_dir != '' {
     file { 'monit.dir':
       ensure  => directory,
       path    => $monit::config_dir,

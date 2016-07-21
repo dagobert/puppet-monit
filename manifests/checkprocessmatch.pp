@@ -1,17 +1,18 @@
-# Define: monit::checkpid
+# Define: monit::checkprocessmatch
 #
-# Basic PID service checking define
+# Basic processs checking define that works by pattern matching
+# against the process name (command line) in the process table.
 #
 # Usage:
 # With standard template:
-# monit::checkpid  { "name": }
+# monit::checkprocessmatch { "name": }
 #
-define monit::checkpid (
+define monit::checkprocessmatch (
   $process      = '',
   $processuid   = '',
   $processgid   = '',
-  $template     = 'monit/checkpid.erb',
-  $pidfile      = '',
+  $template     = 'monit/checkprocessmatch.erb',
+  $pattern      = '',
   $startprogram = '',
   $stopprogram  = '',
   $restarts     = '5',
@@ -29,9 +30,9 @@ define monit::checkpid (
     default => $process,
   }
 
-  $real_pidfile = $pidfile ? {
-    ''      => "/var/run/${process}.pid",
-    default => $pidfile,
+  $real_pattern = $pattern ? {
+    ''      => $real_process,
+    default => $pattern,
   }
 
   $real_startprogram = $startprogram ? {
@@ -54,7 +55,7 @@ define monit::checkpid (
     default => $processgid,
   }
 
-  file { "MonitCheckPid_${name}":
+  file { "MonitCheckProcessMatch_${name}":
     ensure  => $ensure,
     path    => "${monit::plugins_dir}/${name}",
     mode    => $monit::config_file_mode,

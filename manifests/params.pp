@@ -79,6 +79,10 @@ class monit::params {
     default => 'monit',
   }
 
+  $process_group = $::operatingsystem ? {
+    default => 'monit',
+  }
+
   $config_dir = $::operatingsystem ? {
     default => '/etc/monit',
   }
@@ -144,7 +148,7 @@ class monit::params {
   $monitor = false
   $monitor_tool = ''
   $monitor_target = $::ipaddress
-  $firewall = false
+  $fw = false
   $firewall_tool = ''
   $firewall_src = '0.0.0.0/0'
   $firewall_dst = $::ipaddress
